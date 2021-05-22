@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api
-          image: 43567/node-projeto-api:v2
+          image: 43567/node-projeto-api:v3
           ports:
           - containerPort: 8080
           env:
@@ -34,4 +34,4 @@ spec:
     - port: 80
       targetPort: 8080
       nodePort: 30000 
-  type: LoadBalancer
+  type: NodePort
