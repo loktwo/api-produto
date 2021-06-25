@@ -21,5 +21,5 @@ jobs:
           password: ${{secrets.ACR_PWD}}
           login-server: webflaskapplication.azurecr.io
       - run: |
-          docker build /scr/Dockerfile -t webflaskapplication.azurecr.io/produto-api:v2
-          docker push webflaskapplication.azurecr.io/produto-api:v2
+          docker build /scr/Dockerfile -t sample/produto-api:v2
+          docker push sample/produto-api:v2
