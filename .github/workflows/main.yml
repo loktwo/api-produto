@@ -13,37 +13,13 @@ jobs:
     
     steps:
       - uses: actions/checkout@v2
-
-      - name: Docker hub login
-        uses: docker/login-action@v1.9.0
+      
+      - name: Azure Container Registry Login
+        uses: Azure/docker-login@v1
         with:
-          username: ${{secrets.DOCKERHUB_USER}}
-          password: ${{secrets.DOCKERHUB_PWD}}
-          
-      - name: Build and push Docker images
-        uses: docker/build-push-action@v2.4.0
-        with:
-          context: ./src
-          files: ./src/Dockerfile
-          push: true
-          tags: |
-            43567/hello_world-python:latest
-            43567/hello_world-python:${{github.run_number}}
-  CD:
-    runs-on: ubuntu-latest
-    needs: [CI]
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Kubernetes set context
-        uses: Azure/k8s-set-context@v1
-        with:
-          method: kubeconfig
-          kubeconfig: ${{secrets.K8S_CONFIG}}
-          
-      - name: Deploy to Kubernetes cluster
-        uses: Azure/k8s-deploy@v1.3
-        with:
-          manifests: |
-            k8s/mongodb/deployment.yaml
-            k8s/mongodb/services.yaml
+          username: ${{secrets.ACR_USER}}
+          password: ${{secrets.ACR_PWD}}
+          login-server: webflaskapplication.azurecr.io
+      - run: |
+          docker build /scr/Dockerfile -t webflaskapplication.azurecr.io/produto-api:v2:${{ github.sha }}
+          docker push webflaskapplication.azurecr.io/produto-api:v2:${{ github.sha }}
